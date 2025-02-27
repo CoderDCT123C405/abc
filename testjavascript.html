@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài tập JavaScript</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -51,19 +45,64 @@
             <option value="4">Kiểm tra số nguyên tố</option>
             <option value="5">Tính tổng các số trong mảng</option>
             <option value="6">Đảo ngược chuỗi</option>
+            <option value="7">FizzBuzz</option>
+            <option value="8">Dãy Fibonacci</option>
+            <option value="9">Đếm số lượng kí tự trong chuỗi</option>
+            <option value="10">Chuyển đổi chữ hoa - chữ thường</option>
+            <option value="12">Tìm số lớn nhất trong dãy số</option>
         </select>
-        <input type="number" id="inputValue" placeholder="Nhập dữ liệu">
+        <input type="text" id="inputValue" placeholder="Nhập dữ liệu" style="display: none; width: 95%;">
         <button onclick="runExercise()">Chạy bài tập</button>
         <div id="output" class="result">Kết quả sẽ hiển thị ở đây</div>
     </div>
 
     <script>
+        function updateInput() {
+        const exercise = document.getElementById("exerciseSelect").value;
+        const input = document.getElementById("inputValue");
+
+        // Hiện ô nhập dữ liệu nếu không phải bài tập 1
+        input.style.display = exercise === "1" || exercise === "" ? "none" : "block";
+
+        // Cập nhật placeholder và kiểu nhập liệu phù hợp với bài tập
+        switch (exercise) {
+            case "5":
+                input.placeholder = "Nhập các số cách nhau bởi dấu phẩy (VD: 1,2,3)";
+                input.type = "text";
+                break;
+            case "6":
+                input.placeholder = "Nhập chuỗi để đảo ngược";
+                input.type = "text";
+                break;
+            case "8": // Fibonacci
+                input.placeholder = "Nhập số lượng phần tử Fibonacci";
+                input.type = "number";
+                break;
+            case "9":
+                input.placeholder = "Nhập chuỗi";
+                input.type = "text";
+                break;
+            case "10":
+                input.placeholder = "Nhập chuỗi cần chuyển đổi";
+                input.type = "text";
+                break;
+            default:
+                input.placeholder = "Nhập số";
+                input.type = "number";
+                }
+            }
+
+        // Gọi updateInput() ngay khi trang tải xong để cập nhật giao diện
+        document.getElementById("exerciseSelect").addEventListener("change", updateInput);
+
+
         function runExercise() {
             const exercise = document.getElementById("exerciseSelect").value;
-            const inputValue = parseInt(document.getElementById("inputValue").value);
+            const inputStr = document.getElementById("inputValue").value;
+            const inputValue = parseInt(inputStr);
             let output = "";
-            
-            if (isNaN(inputValue) && exercise !== "1") {
+
+            if (exercise !== "1" && (isNaN(inputValue) || inputValue < 0) && inputStr.trim() === "") {
                 output = "Vui lòng nhập số hợp lệ";
             } else {
                 switch (exercise) {
@@ -73,42 +112,86 @@
                     case "2":
                         output = inputValue % 2 === 0 ? "Số chẵn" : "Số lẻ";
                         break;
-                    case "3":
-                        let factorial = 1;
+                        case "3":
+                    let factorial = 1;
+
+                    if (inputValue < 0) {
+                        output = "Không thể tính giai thừa của số âm";
+                    } else if (inputValue === 0) {
+                        output = "Giai thừa của 0 là 1";
+                    } else {
                         for (let i = 1; i <= inputValue; i++) {
                             factorial *= i;
                         }
                         output = `Giai thừa của ${inputValue} là ${factorial}`;
-                        break;
+                    }
+                    break;
+
                     case "4":
-                        let isPrime = true;
-                        if (inputValue <2) {
-                            isPrime = false;
-                        } else {
-                            for ( let i=2; i< inputValue; i++) {
-                                if (inputValue % i === 0) {
-                                    isPrime = false;
-                                    break;
-                                }
+                        let isPrime = inputValue > 1;
+                        for (let i = 2; i <= Math.sqrt(inputValue); i++) {
+                            if (inputValue % i === 0) {
+                                isPrime = false;
+                                break;
                             }
                         }
                         output = isPrime ? "Số nguyên tố" : "Không phải số nguyên tố";
                         break;
-                        case "5":
-                            let sum = 0;
-                            for (let i=0; i<=inputValue; i++){
-                                sum += i;
+                    case "5":
+                        let sum = 0;
+                        for (let i = 1; i <= inputValue; i++) {
+                            sum += i;
+                        }
+                        output = `Tổng các số từ 1 đến ${inputValue} là ${sum}`;
+                        break;
+                        case "6":
+                        let strToReverse = String(inputStr).trim(); 
+
+                        if (strToReverse === "") {
+                            output = "Vui lòng nhập chuỗi hoặc số để đảo ngược";
+                        } else {
+                            output = `Chuỗi đảo ngược: ${strToReverse.split("").reverse().join("")}`;
+                        }
+                        break;
+
+
+                    case "7":
+                        if (inputValue % 3 === 0 && inputValue % 5 === 0) {
+                            output = "FizzBuzz";
+                        } else if (inputValue % 3 === 0) {
+                            output = "Fizz";
+                        } else if (inputValue % 5 === 0) {
+                            output = "Buzz";
+                        } else {
+                            output = inputValue;
+                        }
+                        break;
+                    case "8":
+                        let fibo = [0, 1];
+                        for (let i = 2; i <= inputValue; i++) {
+                            fibo[i] = fibo[i - 1] + fibo[i - 2];
+                        }
+                        output = `Dãy Fibonacci đến số thứ ${inputValue}: ${fibo.join(", ")}`;
+                        break;
+                    case "9":
+                        let strValue = String(inputStr).trim();
+                        output = `Số kí tự trong chuỗi: ${strValue.length}`;
+                        break;
+                    case "10":
+                        let arr = inputStr.split("");
+                        for (let i=0; i<arr.length; i++) {
+                            if (arr[i] === arr[i].toUpperCase()) {
+                                arr[i] = arr[i].toLowerCase();
+                            } else {
+                                arr[i] = arr[i].toUpperCase();
                             }
-                            output = `Tổng các số từ 1 đến ${inputValue} là ${sum}`;
-                        break;
-                    case "6":
-                        output = inputValue.split("").reverse().join("");
-                        break;
+                        }
+                        output = `Chuỗi sau khi chuyển đổi: ${arr.join("")}`;
                     default:
                         output = "Vui lòng chọn bài tập";
                 }
             }
-            
+
             document.getElementById("output").innerText = "Kết quả: " + output;
         }
     </script>
