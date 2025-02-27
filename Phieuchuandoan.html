@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Chẩn Đoán Bệnh</title>
+    <script>
+        function updateTests() {
+            var genderRadios = document.getElementsByName("gender");
+            var gender = "";
+            
+            genderRadios.forEach(function(radio) {
+                if (radio.checked) {
+                    gender = radio.value;
+                }
+            });
+
+            var availableTests = document.getElementById("available-tests");
+            var selectedTests = document.getElementById("selected-tests");
+            availableTests.innerHTML = "";
+            selectedTests.innerHTML = "";
+
+            var tests = [];
+            if (gender === "nam") {
+                tests = [
+                    "Xét nghiệm tuyến tiền liệt", "Xét nghiệm testosterone", "Siêu âm tim", 
+                    "Chụp X-quang phổi", "Kiểm tra huyết áp", "Xét nghiệm đường huyết", 
+                    "Xét nghiệm mỡ máu", "Kiểm tra chức năng gan", "Siêu âm ổ bụng", "Đo điện tim"
+                ];
+            } else if (gender === "nu") {
+                tests = [
+                    "Khám phụ khoa", "Khám thai", "Siêu âm vú", "Xét nghiệm Pap", "Kiểm tra loãng xương", 
+                    "Xét nghiệm nội tiết tố", "Siêu âm vùng chậu", "Xét nghiệm tiểu đường", 
+                    "Xét nghiệm nhiễm trùng đường tiết niệu", "Đo mật độ xương"
+                ];
+            }
+
+            tests.forEach(function(test) {
+                var option = document.createElement("option");
+                option.text = test;
+                availableTests.add(option);
+            });
+        }
+
+        function moveOption(sourceId, targetId) {
+            var source = document.getElementById(sourceId);
+            var target = document.getElementById(targetId);
+            var selectedOptions = Array.from(source.selectedOptions);
+            
+            selectedOptions.forEach(function(option) {
+                target.add(option);
+            });
+        }
+
+        function moveUp() {
+            var selectedTests = document.getElementById("selected-tests");
+            var selectedOption = selectedTests.selectedOptions[0];
+            if (selectedOption && selectedOption.previousElementSibling) {
+                selectedTests.insertBefore(selectedOption, selectedOption.previousElementSibling);
+            }
+        }
+
+        function moveDown() {
+            var selectedTests = document.getElementById("selected-tests");
+            var selectedOption = selectedTests.selectedOptions[0];
+            if (selectedOption && selectedOption.nextElementSibling) {
+                selectedTests.insertBefore(selectedOption.nextElementSibling, selectedOption);
+            }
+        }
+    </script>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid #000;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            width: 90%;
+            height: 300px;
+            padding-bottom: 5px;
+        }
+        .box-pont {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #000;
+            padding: 10px;
+            border-radius: 10px;
+            height: 85px;
+        }
+        .box-pont1 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #000;
+            padding: 10px;
+            border-radius: 10px;
+            height: 80px;
+            margin-top: 10px;
+        }
+        .btn-move {
+            margin: 5px;
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        select {
+            width: 100%;
+            height: 200px;
+        }
+        h2 {
+            text-align: center;
+        }
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .phieu {
+            width: 100%;
+            margin: 0 auto;
+            border: 3px solid #000;
+            border-radius: 10px;
+        }
+        .btn {
+            margin-top: 20px; 
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="phieu">  
+        <h2>Phiếu Chẩn Đoán Bệnh</h2>
+        <form action="" method="post">
+            <label for="date">Ngày khám:</label>
+            <input type="date" id="date" name="date" required><br><br>
+            <label for="name">Họ và tên:</label>
+            <input type="text" id="name" name="name" required><br><br>
+            
+            <label>Giới tính:</label>
+            <input type="radio" name="gender" value="nam" onclick="updateTests()"> Nam
+            <input type="radio" name="gender" value="nu" onclick="updateTests()"> Nữ
+            <br><br>
+
+            <div class="container">
+                <div class="box">
+                    <label>Dịch vụ có sẵn:</label>
+                    <select id="available-tests" multiple size="10"></select>
+                </div>
+                <div class="box-pont">
+                    <button type="button" class="btn-move" onclick="moveOption('available-tests', 'selected-tests')">→</button>
+                    <button type="button" class="btn-move" onclick="moveOption('selected-tests', 'available-tests')">←</button>
+                </div>
+                <div class="box">
+                    <label>Dịch vụ đã chọn:</label>
+                    <select id="selected-tests" multiple size="10"></select>
+                    <div class="box-pont1">
+                        <button type="button" class="btn-move" onclick="moveUp()">↑</button>
+                        <button type="button" class="btn-move" onclick="moveDown()">↓</button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">Gửi phiếu</button>
+        </form>
+    </div>
+</body>
+</html>
