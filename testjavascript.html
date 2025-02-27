@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập JavaScript</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        select, input, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: blue;
+            color: white;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #eaeaea;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bài tập JavaScript</h1>
+        <select id="exerciseSelect">
+            <option value="">Chọn bài tập</option>
+            <option value="1">In 'Hello, World!'</option>
+            <option value="2">Kiểm tra số chẵn lẻ</option>
+            <option value="3">Tính giai thừa</option>
+            <option value="4">Kiểm tra số nguyên tố</option>
+            <option value="5">Tính tổng các số trong mảng</option>
+            <option value="6">Đảo ngược chuỗi</option>
+        </select>
+        <input type="number" id="inputValue" placeholder="Nhập dữ liệu">
+        <button onclick="runExercise()">Chạy bài tập</button>
+        <div id="output" class="result">Kết quả sẽ hiển thị ở đây</div>
+    </div>
+
+    <script>
+        function runExercise() {
+            const exercise = document.getElementById("exerciseSelect").value;
+            const inputValue = parseInt(document.getElementById("inputValue").value);
+            let output = "";
+            
+            if (isNaN(inputValue) && exercise !== "1") {
+                output = "Vui lòng nhập số hợp lệ";
+            } else {
+                switch (exercise) {
+                    case "1":
+                        output = "Hello, World!";
+                        break;
+                    case "2":
+                        output = inputValue % 2 === 0 ? "Số chẵn" : "Số lẻ";
+                        break;
+                    case "3":
+                        let factorial = 1;
+                        for (let i = 1; i <= inputValue; i++) {
+                            factorial *= i;
+                        }
+                        output = `Giai thừa của ${inputValue} là ${factorial}`;
+                        break;
+                    case "4":
+                        let isPrime = true;
+                        if (inputValue <2) {
+                            isPrime = false;
+                        } else {
+                            for ( let i=2; i< inputValue; i++) {
+                                if (inputValue % i === 0) {
+                                    isPrime = false;
+                                    break;
+                                }
+                            }
+                        }
+                        output = isPrime ? "Số nguyên tố" : "Không phải số nguyên tố";
+                        break;
+                        case "5":
+                            let sum = 0;
+                            for (let i=0; i<=inputValue; i++){
+                                sum += i;
+                            }
+                            output = `Tổng các số từ 1 đến ${inputValue} là ${sum}`;
+                        break;
+                    case "6":
+                        output = inputValue.split("").reverse().join("");
+                        break;
+                    default:
+                        output = "Vui lòng chọn bài tập";
+                }
+            }
+            
+            document.getElementById("output").innerText = "Kết quả: " + output;
+        }
+    </script>
+</body>
+</html>
